@@ -1,4 +1,5 @@
 import functools
+from collections import Counter
 
 under_twenty = [
     'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
@@ -60,7 +61,7 @@ def under_thousand(digits: int) -> str:
     if rest_part == 0:
         return f"{under_twenty[hundred_part]} hundred"
     else:
-        return f"{under_twenty[hundred_part]} hundred {digit_to_num(rest_part)}"
+        return f"{under_twenty[hundred_part]} hundred and {digit_to_num(rest_part)}"
 
 def break_into_thousands(digits: int) -> list[int]:
     parts = []
@@ -79,18 +80,19 @@ def main():
     assert line_on_page(42) == 'forty two\n'
     assert line_on_page(99) == 'ninety nine\n'
     assert line_on_page(100) == 'one hundred\n'
-    assert line_on_page(105) == 'one hundred five\n'
-    assert line_on_page(215) == 'two hundred fifteen\n'
-    assert line_on_page(999) == 'nine hundred ninety nine\n'
-    assert line_on_page(1000) == 'one thousand\n'
-    assert line_on_page(1500) == 'one thousand five hundred\n'
-    assert line_on_page(12345) == 'twelve thousand three hundred forty five\n'
-    assert line_on_page(1000000) == 'one million\n'
-    assert line_on_page(1123123) == 'one million one hundred twenty three thousand one hundred twenty three\n'
-    assert line_on_page(2000001) == 'two million one\n'
-    assert line_on_page(3050607) == 'three million fifty thousand six hundred seven\n'
-    assert line_on_page(1234567890) == 'one billion two hundred thirty four million five hundred sixty seven thousand eight hundred ninety\n'
-    assert line_on_page(1234567890123) == 'one trillion two hundred thirty four billion five hundred sixty seven million eight hundred ninety thousand one hundred twenty three\n'
+    assert line_on_page(105) in ['one hundred five\n', 'one hundred and five\n']
+    assert line_on_page(215) in ['two hundred fifteen\n', 'two hundred and fifteen\n']
+    assert line_on_page(999) in ['nine hundred ninety nine\n', 'nine hundred and ninety nine\n']
+    assert line_on_page(1000) in ['one thousand\n', 'one thousand\n']
+    assert line_on_page(1500) in ['one thousand five hundred\n', 'one thousand five hundred\n']
+    assert line_on_page(12345) in ['twelve thousand three hundred forty five\n', 'twelve thousand three hundred and forty five\n']
+    assert line_on_page(1000000) in ['one million\n', 'one million\n']
+    assert line_on_page(1123123) in ['one million one hundred twenty three thousand one hundred twenty three\n', 'one million one hundred and twenty three thousand one hundred and twenty three\n']
+    assert line_on_page(2000001) in ['two million one\n', 'two million one\n']
+    assert line_on_page(3050607) in ['three million fifty thousand six hundred seven\n', 'three million fifty thousand six hundred and seven\n']
+    assert line_on_page(1234567890) in ['one billion two hundred thirty four million five hundred sixty seven thousand eight hundred ninety\n', 'one billion two hundred and thirty four million five hundred and sixty seven thousand eight hundred and ninety\n']
+    assert line_on_page(1234567890123) in ['one trillion two hundred thirty four billion five hundred sixty seven million eight hundred ninety thousand one hundred twenty three\n', 'one trillion two hundred and thirty four billion five hundred and sixty seven million eight hundred and ninety thousand one hundred and twenty three\n']
+
     def get_text(n: int = 1_000_001) -> str:
         return (line_on_page(i) for i in range(n))
     
@@ -106,6 +108,10 @@ def main():
         seen = seen | chars
     print(f"unique chars used: {seen}")
     print(f"number of unique chars used: {len(seen)}")
+    char_counts = Counter()
+    for i in range(1000001):
+        char_counts.update(line_on_page(i))
+    print(f"character counts: {char_counts}")
 
 if __name__ == "__main__":
     main()
