@@ -61,7 +61,9 @@ def under_thousand(digits: int) -> str:
     if rest_part == 0:
         return f"{under_twenty[hundred_part]} hundred"
     else:
-        return f"{under_twenty[hundred_part]} hundred and {digit_to_num(rest_part)}"
+        # comment out either the british or american style line below
+        return f"{under_twenty[hundred_part]} hundred and {digit_to_num(rest_part)}" #british style
+        # return f"{under_twenty[hundred_part]} hundred {digit_to_num(rest_part)}" #american style
 
 def break_into_thousands(digits: int) -> list[int]:
     parts = []
