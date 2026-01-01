@@ -63,8 +63,8 @@ def under_thousand(digits: int) -> str:
         return f"{under_twenty[hundred_part]} hundred"
     else:
         # comment out either the british or american style line below
-        return f"{under_twenty[hundred_part]} hundred and {digit_to_num(rest_part)}" #british style
-        # return f"{under_twenty[hundred_part]} hundred {digit_to_num(rest_part)}" #american style
+        # return f"{under_twenty[hundred_part]} hundred and {digit_to_num(rest_part)}" #british style
+        return f"{under_twenty[hundred_part]} hundred {digit_to_num(rest_part)}" #american style
 
 def break_into_thousands(digits: int) -> list[int]:
     parts = []
@@ -103,17 +103,16 @@ def main():
     print(f"total letters under a million: {sum(len([i for i in word if not i in [' ', '\n']]) for word in get_text())}")
     print(f"total spaces and new lines under a million: {sum(len([i for i in word if i in [' ', '\n']]) for word in get_text())}")
     seen = set()
-    for i in range(1000001):
-        word = line_on_page(i)
+    for num, word in enumerate(get_text()):
         chars = set(word)
         if chars - seen != set():
-            print(f"the first number where the letters {chars - seen} appear is {i}")
+            print(f"the first number where the letters {chars - seen} appear is {num}")
         seen = seen | chars
     print(f"unique chars used: {seen}")
     print(f"number of unique chars used: {len(seen)}")
     char_counts = Counter()
-    for i in range(1000001):
-        char_counts.update(line_on_page(i))
+    for i in get_text():
+        char_counts.update(i)
     print(f"character counts: {char_counts}")
 
 if __name__ == "__main__":
