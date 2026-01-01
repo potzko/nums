@@ -96,12 +96,17 @@ def main():
     assert line_on_page(1234567890) in ['one billion two hundred thirty four million five hundred sixty seven thousand eight hundred ninety\n', 'one billion two hundred and thirty four million five hundred and sixty seven thousand eight hundred and ninety\n']
     assert line_on_page(1234567890123) in ['one trillion two hundred thirty four billion five hundred sixty seven million eight hundred ninety thousand one hundred twenty three\n', 'one trillion two hundred and thirty four billion five hundred and sixty seven million eight hundred and ninety thousand one hundred and twenty three\n']
 
-    def get_text(n: int = 1_000_001) -> str:
-        return (line_on_page(i) for i in range(n))
+    try:
+        upper_range = int(input("enter the upper range to analyze (default 1,000,000): ") or "1000000")
+    except ValueError:
+        print("invalid input, using default 1,000,000")
+
+    def get_text(n: int = upper_range) -> str:
+        return (line_on_page(i) for i in range(upper_range + 1))
     
-    print(f"total chars under a million: {sum(len(word) for word in get_text())}")
-    print(f"total letters under a million: {sum(len([i for i in word if not i in [' ', '\n']]) for word in get_text())}")
-    print(f"total spaces and new lines under a million: {sum(len([i for i in word if i in [' ', '\n']]) for word in get_text())}")
+    print(f"total chars under {digit_to_num(upper_range)}: {sum(len(word) for word in get_text())}")
+    print(f"total letters under {digit_to_num(upper_range)}: {sum(len([i for i in word if not i in [' ', '\n']]) for word in get_text())}")
+    print(f"total spaces and new lines under {digit_to_num(upper_range)}: {sum(len([i for i in word if i in [' ', '\n']]) for word in get_text())}")
     seen = set()
     for num, word in enumerate(get_text()):
         chars = set(word)
@@ -114,6 +119,7 @@ def main():
     for i in get_text():
         char_counts.update(i)
     print(f"character counts: {char_counts}")
+    print(f"longest number under {digit_to_num(upper_range)}: {max((word for word in get_text()), key=len).strip()}")
 
 if __name__ == "__main__":
     main()
