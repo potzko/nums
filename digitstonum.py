@@ -18,6 +18,7 @@ tens = [
 def line_on_page(digits: int) -> str:
     return digit_to_num(digits) + '\n'
 
+@functools.cache
 def digit_to_num(digits: int) -> str:
     if 0 <= digits <= 20:
         return under_twenty[digits]
